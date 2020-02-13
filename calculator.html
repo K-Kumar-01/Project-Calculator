@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Calculator</title>
+	<link href="calculatorstyle.css" rel="stylesheet">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device_width,intial-scale=1.0" >
+</head>
+<body>
+	<h1>Online Calculator</h1>
+	<div id="calculator">
+		<div class="output" id="result">0</div>
+		<div class ="operator" data-key="+" id="plus"><button >+</button></div>
+		<div class ="operator" data-key="-" id="minus"><button>-</button></div>
+		<div class ="operator" data-key="*"id="multiply"><button>*</button></div>
+		<div class ="operator" data-key="/"id="divide"><button>/</button></div>
+		<div class="number" data-key="9"id="nine"><button class="number_button">9</button></div>
+		<div class="number" data-key="8"id="eight"><button class="number_button">8</button></div>
+		<div class="number" data-key="7"id="seven"><button class="number_button">7</button></div>
+		<div class="delete" data-key="b"id="back"><button>Del</button></div>
+		<div class="number" data-key="6"id="six"><button class="number_button">6</button></div>
+		<div class="number" data-key="5"id="five"><button class="number_button">5</button></div>
+		<div class="number" data-key="4"id="four"><button class="number_button">4</button></div>
+		<div class="operator" data-key="="id="assign"><button>=</button></div>
+		<div class="number" data-key="3"id="three"><button class="number_button">3</button></div>
+		<div class="number" data-key="2"id="two"><button class="number_button">2</button></div>
+		<div class="number" data-key="1"id="one"><button class="number_button">1</button></div>
+		<div class="number" data-key="."id="decimal"><button class="number_button">.</button></div>
+		<div class="number" data-key="0"id="zero"><button class="number_button">0</button></div>
+		<div class="delete" data-key="c"id="clear"><button>C</button></div>
+
+
+	</div>
+	<div id="expression"> Expression is:<p></p></div>
+<script>
+	function precedence(c)
+	{
+		switch(c){
+			case "/":
+			case "*": return 2;break;
+			case "-":
+			case "+": return 1;break;
+			default :return 0;
+		}
+	}
+	function operate(a,b,c) {
+		switch(c){
+			case "/": return a/b;break;
+			case "*": return a*b;break;
+			case "-": return a-b;break;
+			case "+": return a+b;break;
+		}
+		
+	}
+	let firstNumber="",firstNumberDecimal=0;
+	let secondNumber="",secondNumberDecimal=0;
+	let thirdNumber="",thirdNumberDecimal=0;
+	let currentOperator="";
+	let previousOperator="";
+	let result="";
+	let previousButton;
+	let previousArea;
+	let disableButton=document.querySelector(" #decimal button");
+	let buttons=document.querySelectorAll('button');
+	let rslt=document.querySelector('#result');
+	let exp="Expression is:"
+	let obuttons=document.querySelectorAll('.operator buittons');
+	for (let i=0;i<buttons.length;i++)
+	{
+		console.log(buttons[i]);
+	}
+	console.log(rslt.display);
+	buttons.forEach(bttn=>{
+		bttn.addEventListener("click",function(){
+			//console.log(currentOperator);
+			
+
+		     if(bttn.parentNode.className==="number"){
+
+				
+				if(currentOperator===""){
+					
+					if(firstNumberDecimal===0)disableButton.disabled=false;
+					if(bttn.parentNode.id==="decimal"){
+						firstNumberDecimal++;
+						console.log(firstNumberDecimal);
+					}
+					firstNumber+=bttn.textContent;
+					rslt.style.textAlign="right";
+					rslt.textContent=firstNumber;
+					exp=exp+bttn.textContent;
+			        expression.textContent=exp;
+			        previousArea=1;
+			        if(firstNumberDecimal===1){
+						disableButton.disabled=true;
+					}
+					//console.log(firstNumber);
+				}
+				else{
+					if(previousOperator===""){
+						if(secondNumberDecimal===0)disableButton.disabled=false;
+						
+						if(bttn.parentNode.id==="decimal")
+						{
+							secondNumberDecimal++;
+						}
+						secondNumber+=bttn.textContent;
+						rslt.textContent=secondNumber;
+						exp=exp+bttn.textContent;
+					    expression.textContent=exp;
+					    previousArea=2;
+					    if(secondNumberDecimal===1)disableButton.disabled=true;
+						//console.log(secondNumber);
+					}
+					else{
+
+						if(thirdNumberDecimal===0)disableButton.disabled=false;
+						
+						if(bttn.parentNode.id==="decimal")
+						{
+							thirdNumberDecimal++;
+						}
+						thirdNumber+=bttn.textContent;
+						exp=exp+bttn.textContent;
+						expression.textContent=exp;
+						previousArea=3;
+						if(thirdNumberDecimal===1)disableButton.disabled=true;
+						//console.log(thirdNumber);
+					}
+				}
+			}
+			else if(bttn.parentNode.className==="operator"){
+
+				if(bttn.parentNode.id==="assign"){
+					if(currentOperator==="")
+					{
+						if(secondNumber===""){
+							result=firstNumber;
+							rslt.textContent=result;
+							exp=exp+bttn.textContent;
+						    expression.textContent=exp;
+
+
+						}
+						else{
+						result=operate(parseFloat(firstNumber),parseFloat(secondNumber),currentOperator);
+						//console.log(result);
+						rslt.textContent=result;
+						secondNumber="";
+						secondNumberDecimal=0;
+						firstNumber=result;
+						currentOperator=bttn.textContent;
+						//console.log(currentOperator);
+						exp=exp+bttn.textContent;
+						expression.textContent=exp;
+					}
+					}
+					if(previousOperator===""){
+						if(secondNumber===""){
+							result=firstNumber;
+							rslt.textContent=result;
+							exp=exp+bttn.textContent;
+						    expression.textContent=exp;
+
+						}
+						else{
+						result=operate(parseFloat(firstNumber),parseFloat(secondNumber),currentOperator);
+						console.log(result);
+						rslt.textContent=result;
+						secondNumber="";
+						secondNumberDecimal=0;
+						firstNumber=result;
+						currentOperator=bttn.textContent;
+						console.log(currentOperator);
+						exp=exp+bttn.textContent;
+						expression.textContent=exp;
+					}
+					}
+					else{
+							let temp=operate(parseFloat(secondNumber),parseFloat(thirdNumber),currentOperator);
+							result=operate(parseFloat(firstNumber),parseFloat(temp),previousOperator);
+							rslt.textContent=result;
+							firstNumber=result;
+							secondNumber="";
+							thirdNumber="";
+							secondNumberDecimal=thirdNumberDecimal=0;
+							previousOperator="";
+							currentOperator=bttn.textContent;
+							exp=exp+bttn.textContent;
+							expression.textContent=exp;
+						}
+						firstNumber=secondNumber=thirdNumber="";
+						firstNumberDecimal=secondNumberDecimal=thirdNumberDecimal=0;
+						currentOperator=previousOperator="";
+						expression.textContent=exp;
+						exp="Expression is";
+						
+				}
+
+				else if(precedence(bttn.textContent)>precedence(currentOperator)){
+					previousOperator=currentOperator;
+					currentOperator=bttn.textContent;
+					exp=exp+bttn.textContent;
+					expression.textContent=exp;
+					//console.log(previousOperator);
+					//console.log(currentOperator);
+				}
+				else{
+					if(previousOperator===""){
+						result=operate(parseFloat(firstNumber),parseFloat(secondNumber),currentOperator);
+						console.log(result);
+						rslt.textContent=result;
+						secondNumber="";
+						secondNumberDecimal=0;
+						firstNumber=result;
+						currentOperator=bttn.textContent;
+						exp=exp+bttn.textContent;
+						expression.textContent=exp;
+					}
+					else{
+						if(precedence(bttn.textContent)<=precedence(previousOperator)){
+							let temp=operate(parseFloat(secondNumber),parseFloat(thirdNumber),currentOperator);
+							result=operate(parseFloat(firstNumber),parseFloat(temp),previousOperator);
+							rslt.textContent=result;
+							firstNumber=result;
+							secondNumber="";
+							thirdNumber="";
+							secondNumberDecimal=thirdNumberDecimal=0;
+							previousOperator="";
+							currentOperator=bttn.textContent;
+							exp=exp+bttn.textContent;
+							expression.textContent=exp;
+						}
+						else{
+							result=operate(parseFloat(secondNumber),parseFloat(thirdNumber),currentOperator);
+							currentOperator=bttn.textContent;
+							rslt.textContent=result;
+							secondNumber=result;
+							thirdNumber="";
+							thirdNumberDecimal=0;
+							exp=exp+bttn.textContent;
+							expression.textContent=exp;
+						}
+					}
+
+				}
+			}
+			else if(bttn.parentNode.id==="clear")
+			{
+				firstNumber="";
+				secondNumber="";
+				thirdNumber="";
+				firstNumberDecimal=secondNumberDecimal=thirdNumberDecimal=0;
+				currentOperator="";
+				previousOperator="";
+				rslt.textContent="0";
+				exp="Expression is:";
+				expression.textContent=exp;
+			}
+			else if(bttn.parentNode.id==="back")
+			{
+				if(previousArea===3){
+					if(thirdNumber[thirdNumber.length-1]==="."){
+						disableButton.disabled=false;
+						thirdNumberDecimal=0;
+					}
+					thirdNumber=thirdNumber.substring(0,thirdNumber.length-1);
+					if(thirdNumber==="")rslt.textContent="0";
+					else{
+						rslt.textContent=thirdNumber;
+					}
+					console.log(thirdNumber);
+				}
+				else if(previousArea===2){
+					if(secondNumber[secondNumber.length-1]==="."){
+						disableButton.disabled=false;
+						secondNumberDecimal=0;
+					}
+					secondNumber=secondNumber.substring(0,secondNumber.length-1);
+					if(secondNumber==="")rslt.textContent="0";
+					rslt.textContent=secondNumber;
+					console.log(secondNumber);
+				}
+				else if(previousArea===1){
+					if(firstNumber[firstNumber.length-1]==="."){
+						disableButton.disabled=false;
+						firstNumberDecimal=0;
+					}
+					firstNumber=firstNumber.substring(0,firstNumber.length-1);
+					if(firstNumber==="")rslt.textContent="0";
+					else rslt.textContent=firstNumber;
+					console.log(firstNumber);
+				}
+				exp=exp.substring(0,exp.length-1);
+				expression.textContent=exp;
+			}
+			previousButton=bttn.textContent;
+
+		})
+	})
+	addEventListener('keydown',(event)=>{
+
+		if(event.key==="1" || event.key==="2" ||event.key==="3" ||event.key==="4" ||event.key==="5" ||event.key==="6" ||event.key==="7" ||event.key==="8" ||event.key==="9" ||event.key==="0" ){
+
+				
+				if(currentOperator===""){
+					
+					if(firstNumberDecimal===0)disableButton.disabled=false;
+					if(event.key==="."){
+						firstNumberDecimal++;
+						console.log(firstNumberDecimal);
+					}
+					firstNumber+=event.key;
+					rslt.style.textAlign="right";
+					rslt.textContent=firstNumber;
+					exp=exp+event.key;
+			        expression.textContent=exp;
+			        previousArea=1;
+			        if(firstNumberDecimal===1){
+						disableButton.disabled=true;
+					}
+					//console.log(firstNumber);
+				}
+				else{
+					if(previousOperator===""){
+						if(secondNumberDecimal===0)disableButton.disabled=false;
+						
+						if(event.key===".")
+						{
+							secondNumberDecimal++;
+						}
+						secondNumber+=event.key;
+						rslt.textContent=secondNumber;
+						exp=exp+event.key;
+					    expression.textContent=exp;
+					    previousArea=2;
+					    if(secondNumberDecimal===1)disableButton.disabled=true;
+						//console.log(secondNumber);
+					}
+					else{
+
+						if(thirdNumberDecimal===0)disableButton.disabled=false;
+						
+						if(event.key===".")
+						{
+							thirdNumberDecimal++;
+						}
+						thirdNumber+=event.key;
+						exp=exp+event.key;
+						expression.textContent=exp;
+						previousArea=3;
+						if(thirdNumberDecimal===1)disableButton.disabled=true;
+						//console.log(thirdNumber);
+					}
+				}
+			}
+			else if(event.key==="+" || event.key==="-" || event.key==="*" || event.key==="/" || event.key==="="){
+
+				if(event.key==="="){
+					if(currentOperator==="")
+					{
+						if(secondNumber===""){
+							result=firstNumber;
+							rslt.textContent=result;
+							exp=exp+event.key;
+						    expression.textContent=exp;
+
+
+						}
+						else{
+						result=operate(parseFloat(firstNumber),parseFloat(secondNumber),currentOperator);
+						//console.log(result);
+						rslt.textContent=result;
+						secondNumber="";
+						secondNumberDecimal=0;
+						firstNumber=result;
+						currentOperator=event.key;
+						//console.log(currentOperator);
+						exp=exp+event.key;
+						expression.textContent=exp;
+					}
+					}
+					if(previousOperator===""){
+						if(secondNumber===""){
+							result=firstNumber;
+							rslt.textContent=result;
+							exp=exp+event.key;
+						    expression.textContent=exp;
+
+						}
+						else{
+						result=operate(parseFloat(firstNumber),parseFloat(secondNumber),currentOperator);
+						console.log(result);
+						rslt.textContent=result;
+						secondNumber="";
+						secondNumberDecimal=0;
+						firstNumber=result;
+						currentOperator=event.key;
+						console.log(currentOperator);
+						exp=exp+event.key;
+						expression.textContent=exp;
+					}
+					}
+					else{
+							let temp=operate(parseFloat(secondNumber),parseFloat(thirdNumber),currentOperator);
+							result=operate(parseFloat(firstNumber),parseFloat(temp),previousOperator);
+							rslt.textContent=result;
+							firstNumber=result;
+							secondNumber="";
+							thirdNumber="";
+							secondNumberDecimal=thirdNumberDecimal=0;
+							previousOperator="";
+							currentOperator=event.key;
+							exp=exp+event.key;
+							expression.textContent=exp;
+						}
+						firstNumber=secondNumber=thirdNumber="";
+						firstNumberDecimal=secondNumberDecimal=thirdNumberDecimal=0;
+						currentOperator=previousOperator="";
+						expression.textContent=exp;
+						exp="Expression is";
+						
+				}
+
+				else if(precedence(event.key)>precedence(currentOperator)){
+					previousOperator=currentOperator;
+					currentOperator=event.key;
+					exp=exp+event.key;
+					expression.textContent=exp;
+					//console.log(previousOperator);
+					//console.log(currentOperator);
+				}
+				else{
+					if(previousOperator===""){
+						result=operate(parseFloat(firstNumber),parseFloat(secondNumber),currentOperator);
+						//console.log(result);
+						rslt.textContent=result;
+						secondNumber="";
+						secondNumberDecimal=0;
+						firstNumber=result;
+						currentOperator=event.key;
+						exp=exp+event.key;
+						expression.textContent=exp;
+					}
+					else{
+						if(precedence(bttn.textContent)<=precedence(previousOperator)){
+							let temp=operate(parseFloat(secondNumber),parseFloat(thirdNumber),currentOperator);
+							result=operate(parseFloat(firstNumber),parseFloat(temp),previousOperator);
+							rslt.textContent=result;
+							firstNumber=result;
+							secondNumber="";
+							thirdNumber="";
+							secondNumberDecimal=thirdNumberDecimal=0;
+							previousOperator="";
+							currentOperator=event.key;
+							exp=exp+event.key;
+							expression.textContent=exp;
+						}
+						else{
+							result=operate(parseFloat(secondNumber),parseFloat(thirdNumber),currentOperator);
+							currentOperator=event.key;
+							rslt.textContent=result;
+							secondNumber=result;
+							thirdNumber="";
+							thirdNumberDecimal=0;
+							exp=exp+event.key;
+							expression.textContent=exp;
+						}
+					}
+
+				}
+			}
+			else if(event.key==="c")
+			{
+				firstNumber="";
+				secondNumber="";
+				thirdNumber="";
+				firstNumberDecimal=secondNumberDecimal=thirdNumberDecimal=0;
+				currentOperator="";
+				previousOperator="";
+				rslt.textContent="0";
+				exp="Expression is:";
+				expression.textContent=exp;
+			}
+			else if(event.key==="Backspace")
+			{
+				if(previousArea===3){
+					if(thirdNumber[thirdNumber.length-1]==="."){
+						disableButton.disabled=false;
+						thirdNumberDecimal=0;
+					}
+					thirdNumber=thirdNumber.substring(0,thirdNumber.length-1);
+					if(thirdNumber==="")rslt.textContent="0";
+					else{
+						rslt.textContent=thirdNumber;
+					}
+					console.log(thirdNumber);
+				}
+				else if(previousArea===2){
+					if(secondNumber[secondNumber.length-1]==="."){
+						disableButton.disabled=false;
+						secondNumberDecimal=0;
+					}
+					secondNumber=secondNumber.substring(0,secondNumber.length-1);
+					if(secondNumber==="")rslt.textContent="0";
+					rslt.textContent=secondNumber;
+					console.log(secondNumber);
+				}
+				else if(previousArea===1){
+					if(firstNumber[firstNumber.length-1]==="."){
+						disableButton.disabled=false;
+						firstNumberDecimal=0;
+					}
+					firstNumber=firstNumber.substring(0,firstNumber.length-1);
+					if(firstNumber==="")rslt.textContent="0";
+					else rslt.textContent=firstNumber;
+					console.log(firstNumber);
+				}
+				exp=exp.substring(0,exp.length-1);
+				expression.textContent=exp;
+			}
+			previousButton=event.key;
+
+		
+	})
+
+</script>
+</body>
+</html>
