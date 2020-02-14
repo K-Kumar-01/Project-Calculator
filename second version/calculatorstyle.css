@@ -1,0 +1,104 @@
+#calculator{
+	display:grid;
+	grid-template-columns: repeat(4,60px);
+	position: absolute;
+	left:40%;
+	top:30%;
+	grid-gap:10px 10px;
+	background: rgba(0,0,0,0.1);
+	border: 2px solid black;
+	margin:auto;
+	padding:15px;
+	align-items: stretch;
+	
+}
+button{
+	height:50px;
+	width: 50px;
+	text-align: center;
+}
+button:hover{
+	width:52px;
+	height:102%;
+
+}
+h1{
+	position: absolute;
+	left:43%;
+	top:22%;
+	background: orange;
+	color:rgba(220,105,125,1);
+
+}
+.delete button{
+	background: rgba(150,200,170,0.9);
+	color:white;
+	font-weight:bold;
+	font-size: 20px; 
+
+}
+.operator button{
+	background: rgba(200,210,255,1);
+
+}
+
+#zero{
+	grid-row:6/7;
+	grid-column:2/3;
+
+}
+#decimal{
+	grid-row:6/7;
+	grid-column:1/2;
+}
+#clear{
+	grid-row: 6/7;
+	grid-column: 3/4;
+}
+#assign{
+	grid-row:4/7;
+	grid-column:4/5;
+
+}
+#assign button{
+	height: 100%;
+}
+#result{
+	grid-column:1/5;
+	font-size:40px;
+	font-weight: bold;
+	background: rgba(0,0,0,0.2);
+	color:white;
+	border-color:black;
+	border-style: solid;
+	border-width: 2px; 
+
+}
+#plus{
+	grid-column:1/2;
+}
+#nine{
+	grid-column: 1/2;
+	grid-row:3/4;
+}
+
+#eight{
+	grid-column: 2/3;
+	grid-row:3/4;
+}
+
+#seven{
+	grid-column: 3/4;
+	grid-row:3/4;
+}
+#one{
+	grid-column: 3/4;
+}
+
+#calculator #result {
+	
+	padding-top: 0px;
+	padding-right: 10px;
+	padding-bottom:2px;
+	text-align: right;
+}
